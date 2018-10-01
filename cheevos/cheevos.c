@@ -3059,9 +3059,13 @@ found:
       size_t chunks     = coro->len >> 14;
 
       /* Assume that valid (including unlicensed) NES titles do not 
-       * exceed 32MiB, in order to avoid excessive requests
+       * exceed 32Mb, in order to avoid excessive requests
        * with large non-NES files. */
-      if (chunks > 250)
+      if (chunks == 0 || chunks > 250 ||
+        (coro->data[0] == 'N'
+        && coro->data[1] == 'E'
+        && coro->data[2] == 'S'
+        && coro->data[3] == 0x1a))
       {
           CORO_RET();
       }
